@@ -1,0 +1,18 @@
+#BlueJ class context
+comment0.target=DiffieHellman
+comment0.text=\r\n\ Methods\ needed\ for\ this\ class\:\r\n\r\n\ @author\ (Ciar\u00E1n\ Daly)\r\n\ @version\ (v1.0)\r\n
+comment1.params=
+comment1.target=DiffieHellman()
+comment2.params=args
+comment2.target=void\ main(java.lang.String[])
+comment3.params=
+comment3.target=int\ generatePrime()
+comment4.params=num
+comment4.target=boolean\ isPrime(int)
+comment5.params=p
+comment5.target=int\ findPrimitiveRoot(int)
+comment6.params=a\ p
+comment6.target=boolean\ isPrimitiveRoot(int,\ int)
+comment7.params=a\ b\ mod
+comment7.target=int\ power(int,\ int,\ int)
+numComments=8
