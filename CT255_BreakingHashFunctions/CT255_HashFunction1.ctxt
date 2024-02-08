@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=CT255_HashFunction1
+comment0.text=\r\n\ \r\n\ @author\ Michael\ Schukat\r\n
+comment1.params=args
+comment1.target=void\ main(java.lang.String[])
+comment2.params=s
+comment2.target=int\ hashF1(java.lang.String)
+comment3.params=testString\ maxAttempts
+comment3.target=void\ collisionsSearch(java.lang.String,\ int)
+numComments=4
