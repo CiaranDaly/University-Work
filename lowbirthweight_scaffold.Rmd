@@ -1,0 +1,462 @@
+---
+title: "Exploring Factors Associated with Low Birthweight"
+author: "Ciarán Daly, id = 21381943"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: word_document
+---
+
+
+# Exploratory data analysis
+
+In this assignment you will carry out an **exploratory data analysis** of factors thought to be associated with low birthweight.  The factors of interest are maternal smoking during pregnancy, history of premature labour, and number of visits to a physician in first trimester (the first trimester is the first three months of the pregnancy). The goal of the exploratory data analysis is to gain a better understanding of these factors and their associations with low birthweight in our dataset.  
+
+## Load the Libraries and Data Needed
+
+The dataset you will be using is available in the `aplore3` package and you will use the `tidyverse` package for data manipulation. You may not have these installed.  If you get a yellow message to install one or both packages when you open this document in Rstudio, click on install. If you need to install them manually then remove the # and run following code in $\texttt{R}$. You will only need to install the packages once.
+
+```{r, eval = FALSE}
+#install.packages("tidyverse") 
+  # install.packages("aplore3")      
+```
+
+Load the required packages and make the birthweight dataset, `lowbwt` available using the `data` function as follows:   
+
+```{r, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(aplore3)
+
+data(lowbwt)
+```
+
+The low birthweight data is from the textbook "Applied Logistic Regression" by Hosmer and Lemeshow.  The data are on 189 babies born at the Bayside Medical Centre in Massachusetts, in 1986. The following is a description of the variables in this dataset.
+
+|Name|	Description|
+|:------|:------------------------------------------------------------------------|
+|subject| identification code|
+|low |low birthweight ("< 2500 g" or ">= 2500 g")|
+|age |age of mother|
+|lwt|weight at last menstrual period (pounds)|
+|race |race (Black, White, Other)|
+|smoke |smoked during pregnancy (Yes, No)|
+|ptl |premature labour history (None, One, Two, etc.)|
+|ht |history of hypertension (Yes, No)|
+|ui |uterine irritability  (Yes, No)|
+|ftv |number of visits to physician during 1st trimester (three categories: None, One, Two, etc.)|
+|bwt |birthweight (in grams)|
+
+# Tabulations
+
+The key variable of interest is `low` which represents whether a baby is born low birthweight, defined as a birthweight below 2,500 grams.
+
+```{r}
+lowbwt %>% select(low) %>% table()
+```
+
+The tabulation shows 59 of the babies were low birthweight, and 130 were not low birthweight. 
+
+Let's explore the association between smoking during pregnancy and low birthweight by cross-tabulating the two variables `low` and `smoke`.
+
+```{r}
+lowbwt %>% select(smoke, low) %>% table()
+```
+From the cross-tabulation, we see that in this dataset 44+30 = 74 mothers smoked during pregnancy, and 86+29=115 did not. It seems the proportion of low birthweight babies is higher for mothers who smoked during pregnancy than those who did not smoke - let's calculate row percentages so we can compare the proportion of low birthweight babies for mothers who smoked with the proportion of low birthweight babies for mothers who did not smoke.
+
+```{r}
+pnorm(q = 46000 , mean = 45000, sd = 2529.822128, lower.tail = FALSE)
+```
+
+We now explore the association between the mother having a history of any premature labour and low birthweight. First, in the following chunk, we recode the `ptl` variable into two categories, 0 for no premature labour and 1 for 1 or more premature labours, and call the new variable `ptl_any`.
+
+```{r}
+lowbwt<-lowbwt %>% 
+  mutate(ptl_any = ifelse(ptl =="None", 0, 1))
+
+```
+
+**Task 1**: In the following $\texttt{R}$ chunk explore the association between whether the mother had any previous premature labour (`ptl_any`) and whether the baby was born with low birthweight (`low`), using both counts and appropriate proportions/percentages. Describe your findings in 1-2 sentences.
+
+
+```{r}
+
+pnorm(q = 44000, mean = 45000, sd = 2683.281573, lower.tail = FALSE)
+
+
+```
+
+```{r}
+
+data <- c(7.53, 4.35, 7.66, 7.54, 5.83, 1.92, 3.14, 4.41)
+
+sample_mean <- mean(data)
+sample_sd <- sd(data)
+
+n <- length(data)
+SE <- sample_sd / sqrt(n)
+
+df <- n - 1
+t_critical <- qt(0.975, df)
+
+margin_error <- t_critical * SE
+
+upper_limit <- sample_mean + margin_error
+upper_limit <- round(upper_limit, 2)
+
+# Display the upper limit of the 95% confidence interval
+print(upper_limit)
+
+
+
+```
+```{r}
+
+# Given values
+sigma <- 400  # Population standard deviation in grams
+E <- 10       # Half-width (margin of error) in grams
+confidence_level <- 0.99  # 99% confidence level
+
+# Calculate the Z-score for the given confidence level
+Z <- qnorm((1 + confidence_level) / 2)
+
+# Calculate the required sample size
+n <- ((Z^2) * (sigma^2)) / (E^2)
+
+# Round up to the nearest integer
+n <- ceiling(n)
+
+# Display the required sample size
+print(n)
+
+
+```
+
+**Findings for Task 1:** As seen in the data above, a higher percentage of babies who were born to a mother who had any previous premature labour had low birthweight compared to babies who's mothers had no previous premature labour.
+
+
+**Task 2**: In the following $\texttt{R}$ chunk explore the association between the number of visits to a physician in the first trimester (`ftv`) and whether the baby was born with low birthweight (`low`), using both the counts and appropriate proportions/percentages. Describe your findings in 1-2 sentences.
+
+```{r}
+# Given values
+sample_size <- 300
+num_with_mental_health_issues <- 140
+
+# Calculate sample proportion
+sample_proportion <- num_with_mental_health_issues / sample_size
+
+# Confidence level (90%)
+confidence_level <- 0.90
+
+# Calculate the Z-score for the given confidence level
+Z <- qnorm((1 + confidence_level) / 2)
+
+# Calculate the margin of error
+margin_error <- Z * sqrt((sample_proportion * (1 - sample_proportion)) / sample_size)
+
+# Round the result to 3 decimal places
+margin_error <- round(margin_error, 3)
+
+# Display the margin of error
+print(margin_error)
+
+```
+
+```{r}
+# Given values
+sample_size <- 500
+num_never_failed <- 320
+
+# Calculate sample proportion
+sample_proportion <- num_never_failed / sample_size
+
+# Confidence level (90%)
+confidence_level <- 0.90
+
+# Calculate the Z-score for the given confidence level
+Z <- qnorm(1 - (1 - confidence_level) / 2)
+
+# Calculate the margin of error
+margin_error <- Z * sqrt((sample_proportion * (1 - sample_proportion)) / sample_size)
+
+# Calculate the upper limit of the confidence interval
+upper_limit <- sample_proportion + margin_error
+
+# Round the result to 3 decimal places
+upper_limit <- round(upper_limit, 3)
+
+# Display the upper limit of the confidence interval
+print(upper_limit)
+```
+**Findings for Task 2:** As seen in the data above, mothers who had more visits to a physician in the first trimester generally had a lower proportion of babies with a low birthweight when compared to mothers who had no visits to a physician in the first trimester.
+
+
+# Barcharts
+
+Now we will create some barcharts.
+
+## Barchart of Low Birthweight
+
+The following is a barchart of low birthweight status.
+
+```{r}
+# Given values
+sample_size <- 500
+num_never_failed <- 320
+
+# Calculate sample proportion
+sample_proportion <- num_never_failed / sample_size
+
+# Confidence level (90%)
+confidence_level <- 0.90
+
+# Calculate the Z-score for the given confidence level
+Z <- qnorm(1 - (1 - confidence_level) / 2)
+
+# Calculate the margin of error
+margin_error <- Z * sqrt((sample_proportion * (1 - sample_proportion)) / sample_size)
+
+# Calculate the upper limit of the confidence interval
+upper_limit <- sample_proportion + margin_error
+
+# Round the result to 3 decimal places
+upper_limit <- round(upper_limit, 3)
+
+# Display the upper limit of the confidence interval
+print(upper_limit)
+```
+
+```{r}
+# Given values
+sample_mean <- 100.88
+sample_std_dev <- 4.82
+sample_size <- 17
+
+# Calculate upper limit for a 95% 99% tolerance interval
+# Critical values for 95% and 99% two-sided intervals from a standard normal distribution
+z_value_95 <- qnorm(0.975)  # For a 95% confidence level
+z_value_99 <- qnorm(0.995)  # For a 99% confidence level
+
+# Calculate the upper limits for 95% and 99% tolerance intervals
+upper_limit_95 <- sample_mean + (z_value_95 * (sample_std_dev / sqrt(sample_size)))
+upper_limit_99 <- sample_mean + (z_value_99 * (sample_std_dev / sqrt(sample_size)))
+
+# Round the results to one decimal place
+upper_limit_95 <- round(upper_limit_95, 1)
+upper_limit_99 <- round(upper_limit_99, 1)
+
+# Display the upper limits of the 95% and 99% tolerance intervals
+print(paste("Upper Limit for 95% Tolerance Interval:", upper_limit_95))
+print(paste("Upper Limit for 99% Tolerance Interval:", upper_limit_99))
+```
+
+```{r}
+# Given values
+sample_mean <- 42.02
+sample_std_dev <- 14.83
+sample_size <- 40
+
+# Calculate the Z-score for the 97.5th percentile (2.5% upper tail)
+Z <- qnorm(0.975)  # For a 99% confidence level
+
+# Calculate the required length
+required_length <- sample_mean + Z * (sample_std_dev / sqrt(sample_size))
+
+# Round the result to one decimal place
+required_length <- round(required_length, 1)
+
+# Display the required length
+print(paste("Required Length for 2.5% of future kicks (99% confidence):", required_length, "meters"))
+```
+
+```{r}
+# Given values
+sample_mean <- 495.29
+sample_std_dev <- 5.21
+sample_size <- 20
+population_mean <- 500  # Hypothesized population mean
+
+# Calculate the t-test statistic
+t_statistic <- (sample_mean - population_mean) / (sample_std_dev / sqrt(sample_size))
+
+# Round the result to 3 decimal places
+t_statistic <- round(t_statistic, 3)
+
+# Display the t-test statistic
+print(paste("The calculated t-test statistic is:", t_statistic))
+```
+
+```{r}
+# Given values
+significance_level <- 0.1
+degrees_of_freedom <- 19
+
+# Calculate the critical value for a one-tailed t-test
+critical_value <- qt(significance_level, df = degrees_of_freedom)
+
+# Display the critical value
+print(paste("The calculated critical value for the one-tailed t-test is:", critical_value))
+```
+
+```{r}
+# Given values
+test_statistic <- -0.468
+sample_size <- 15
+significance_level <- 0.01
+
+# Calculate degrees of freedom
+degrees_of_freedom <- sample_size - 1
+
+# Calculate critical t-value for a one-tailed test at 0.01 significance level
+critical_value <- qt(significance_level, df = degrees_of_freedom)
+
+# Decide based on the test statistic and critical value
+if (test_statistic < critical_value) {
+  print("The test statistic is not in the rejection region, so we do not reject the null hypothesis at significance level 0.01")
+} else {
+  print("The test statistic is in the rejection region, so we reject the null hypothesis at significance level 0.01")
+}
+```
+
+```{r}
+# Given values from the confidence interval
+lower_limit <- 2.791
+upper_limit <- 4.989
+
+# Calculate the sample mean
+sample_mean <- (lower_limit + upper_limit) / 2
+
+# Null hypothesis value
+null_hypothesis_value <- 0
+
+# Calculate the test statistic
+test_statistic <- (sample_mean - null_hypothesis_value) / ((upper_limit - lower_limit) / (2 * 1.96))  # Divide by half the width of the interval
+
+# Round the test statistic to 3 decimal places
+test_statistic <- round(test_statistic, 3)
+
+# Display the calculated test statistic
+print(paste("The calculated test statistic is:", test_statistic))
+
+```
+
+```{r}
+# Given values
+sample_mean <- 29.08
+population_mean <- 35
+sample_std_dev <- 5.84
+sample_size <- 12
+
+# Calculate the t-statistic
+t_statistic <- (sample_mean - population_mean) / (sample_std_dev / sqrt(sample_size))
+
+# Degrees of freedom for a one-sample t-test
+degrees_of_freedom <- sample_size - 1
+
+# Calculate the p-value using pt function
+# For a two-tailed test, multiply the probability by 2
+p_value <- 2 * pt(t_statistic, df = degrees_of_freedom)
+
+# Display the calculated t-statistic and p-value
+print(paste("The calculated t-statistic is:", round(t_statistic, 3)))
+print(paste("The p-value for the test is:", round(p_value, 5)))
+```
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+**Task 3**: In the following R chunk create a bar chart of smoking status of mothers.
+
+```{r}
+
+ggplot(lowbwt %>% select(smoke), aes(x = smoke, fill = smoke)) +
+  geom_bar()
+
+```
+
+
+## Barchart of Low Birthweight by Smoking Status
+
+Below is a stacked barchart of low birthweight of the babies by smoking status of mothers.
+
+```{r}
+ggplot(lowbwt, aes(x = smoke)) +
+     geom_bar(aes(fill = low), position = "fill") +
+     ylab("Proportion")
+```
+
+## Barchart of Low Birthweight by Preterm Labour
+
+**Task 4**: Create a stacked barchart of low birthweight by any previous preterm labour (`ptl_any`) by writing appropriate code in the R chunk below.
+
+```{r}
+ggplot(lowbwt, aes(x = ptl_any)) +
+     geom_bar(aes(fill = low), position = "fill") +
+     ylab("Proportion")
+
+```
+
+## Barchart of Low Birthweight by Number of Visits to Physician in first trimester
+
+**Task 5**: Create a stacked barchart of low birthweight by number of visits to the physician in the first trimester by writing appropriate code in an R chunk below. 
+
+```{r}
+
+values <- c(-1, -2, 0, 1, 2)
+probabilities <- c(0.220, 0.250, 0.120, 0.060, 0.350)
+
+# Calculate E(X)
+expected_value <- sum(values * probabilities)
+
+# Calculate E(X^2)
+expected_value_squared <- sum((values^2) * probabilities)
+
+# Calculate the variance
+variance <- expected_value_squared - (expected_value^2)
+
+variance
+
+
+
+##ggplot(lowbwt, aes(x = ftv)) +
+ ##geom_bar(aes(fill = low), position = "fill") +
+ ##ylab("Proportion")
+
+```
+
+## Comments on barcharts
+
+**Task 6**: Once you have created the plot write your interpretation of the association between with low birthweight and each of the three factors, based on the three barcharts.  You should mention the direction and strength of each association. (2-3 sentences)
+
+**Smoke:** In the stacked barchart of low birthweight of the babies by smoking status of mothers, we can see a higher proportion of babies born with a low birthweight from mothers who smoke.
+
+**Previous preterm labour:** Based on this barchart, there seems to be a much higher proportion of babies born with a low birthweight from mothers who had any previous preterm labour in comparison to those who did not.
+
+**Visits to the physician in the first trimester:** While for Previous preterm labour & Smoking status of mother, we can see a strong association between both factors and babies being born with a low birthweight, for visits to the physician in the first trimester, there is not as strong of an association. While mothers who had no visits to a physician in the first trimester had the highest proportion of babies born with a low birthweight, we can see that those with Two etc. visits had a higher proportion of low birthweight births than those with only one visit.
+
+
+
+# Conclusion
+
+**Task 7**: Based on the tabulations and bar charts, write a brief conclusion on whether you think the three factors (1) mother smoking during pregnancy, (2) any preterm labour, and (3) number of visits to a physician in the first trimester, could be useful to predict if a baby might be born with low birthweight.  Do you think the relationships between low birthweight and these three factors you have observed in this dataset could be used to make inferences about the relationships in a wider population, and if so, what population?
+
+
+**Conclusion:** Based on the tabulations and bar charts, a mother smoking during pregnancy & a mother having any previous preterm labour could be quite useful in predicting of a baby may be born with a low birthweight as there appears to be a strong association between these factors and low birthweights. The same cannot be concluded for number of visits a mother had to a physician in the first trimester, however, as the number of visits does not greatly impact the proportion of babies born with a low birthweight (As previously stated).
+
+The inferences I would make about the relationships between children born with low birthweight and these three factors for women during pregnancy I have observed in this dataset are as follows:
+
+
+**Mother smoking during pregnancy:** Based on the tabulations and bar charts, smoking can have a strong impact on the  birthweight of babies born to pregnant women.
+
+**Any preterm labour:** Pregnant women who have had any previous preterm labour are also seen to have a much higher proportion of children born with a low birthweight
+
+**Number of visits to a physician in the first trimester:** Unlike the previous two factors, the number of visits to a physician a pregnant woman has in the first trimester does not hold as strong association as smoking or preterm labour. While those who had no visits had the highest proportion of children born with a low birthweight, those whith two etc. had a higher proportion than those with only one visit. Thus, the number of visits to a physician in the first trimester cannot be used as a strong indication to predict if a baby will be born with a low birthweight, compared to the other two factors.
+
+
+
+
+**Task 8**: "knit" the file as a Word (or PDF) document and submit the Word/pdf document to the Assignment 3 submission link on canvas before the deadline.  **Do not submit the .Rmd document or you will lose marks**.
+
+
