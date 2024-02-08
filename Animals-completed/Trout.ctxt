@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=Trout
+comment1.params=name
+comment1.target=Trout(java.lang.String)
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ Trout\r\n
+comment2.params=
+comment2.target=java.lang.String\ toString()
+comment2.text=\r\n\ toString\ method\ returns\ a\ String\ representation\ of\ the\ fish\r\n\ What\ superclass\ has\ Trout\ inherited\ this\ method\ from?\ \r\n
+comment3.params=distance
+comment3.target=void\ move(int)
+comment4.params=
+comment4.target=java.lang.String\ getColour()
+comment5.params=obj
+comment5.target=boolean\ equals(java.lang.Object)
+comment5.text=\r\n\ equals\ method\ defines\ how\ equality\ is\ defined\ between\ \r\n\ the\ instances\ of\ the\ Trout\ class\r\n\ param\ Trout\r\n\ return\ true\ or\ false\ depending\ on\ whether\ the\ input\ object\ is\ \r\n\ equal\ to\ this\ Trout\ object\r\n
+numComments=6

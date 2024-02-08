@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=Fish
+comment1.params=
+comment1.target=Fish()
+comment1.text=\r\n\ Constructor\ for\ objects\ of\ class\ Fish\r\n
+comment2.params=distance
+comment2.target=void\ move(int)
+comment2.text=\r\n\ move\ method\ overrides\ the\ move\ method\r\n\ inherited\ from\ superclass\ Animal\r\n
+comment3.params=
+comment3.target=boolean\ hasFins()
+comment3.text=\r\n\ 'getter'\ method\ for\ the\ hasFins\ field\r\n
+comment4.params=
+comment4.target=boolean\ hasGills()
+comment4.text=\r\n\ 'getter'\ method\ for\ the\ hasGills\ field\r\n
+comment5.params=
+comment5.target=boolean\ hasSkin()
+comment6.params=
+comment6.target=boolean\ getDangerous()
+numComments=7
